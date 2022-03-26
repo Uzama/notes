@@ -4,6 +4,16 @@
 A REST API backend application that can be used to manage personal notes in a multi-user environment.
 
 
+### How to start 
+
+- Make sure database is up and running and you have update the ```configurations/database.yaml``` file with relevant values.
+- Run the ```database.sql``` query to get database and table created.
+- Clone the service locally and run the service by typing ```go run main.go```
+- make sure service is up and running. 
+- Now you can send request to the service.
+
+Note: Use the postman collection ```notes_app.postman_collection.json```
+
 ## API Reference
 
 #### Get all un archived notes
