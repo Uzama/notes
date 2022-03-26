@@ -122,7 +122,12 @@ func (repo NoteRepository) GetAllArchviedNotes(ctx context.Context, paginator en
 
 func (repo NoteRepository) GetSingle(ctx context.Context, id int64) (entities.Note, error) {
 
-	note := entities.Note{}
+	note, ok := repo.cache.GetNote(id)
+	if ok {
+		return note, nil
+	}
+
+	note = entities.Note{}
 
 	query := `
 		SELECT id, user_id, title, description, created_at, updated_at
@@ -155,6 +160,8 @@ func (repo NoteRepository) GetSingle(ctx context.Context, id int64) (entities.No
 		return note, err
 	}
 
+	repo.cache.SetNote(note)
+
 	return note, nil
 }
 
@@ -179,6 +186,10 @@ func (repo NoteRepository) CreateNote(ctx context.Context, note entities.Note) (
 		return 0, err
 	}
 
+	note.ID = id
+
+	repo.cache.SetNote(note)
+
 	return id, nil
 }
 
@@ -198,6 +209,8 @@ func (repo NoteRepository) ArchiveNote(ctx context.Context, id int64) (bool, err
 		return false, err
 	}
 
+	repo.cache.ArchiveNote(id)
+
 	return true, nil
 }
 
@@ -216,6 +229,10 @@ func (repo NoteRepository) UpdateNote(ctx context.Context, id int64, newNote ent
 	if err != nil {
 		return false, err
 	}
+
+	newNote.ID = id
+
+	repo.cache.SetNote(newNote)
 
 	return true, nil
 }
@@ -237,10 +254,18 @@ func (repo NoteRepository) DeleteNote(ctx context.Context, id int64) (bool, erro
 		return false, err
 	}
 
+	repo.cache.DeleteNote(id)
+
 	return true, nil
 }
 
 func (repo NoteRepository) IsExists(ctx context.Context, id int64) (bool, error) {
+
+	_, ok := repo.cache.GetNote(id)
+
+	if ok {
+		return true, nil
+	}
 
 	query := `SELECT EXISTS(SELECT 1 FROM note WHERE id = ?);`
 
@@ -271,6 +296,12 @@ func (repo NoteRepository) IsExists(ctx context.Context, id int64) (bool, error)
 
 func (repo NoteRepository) IsArchived(ctx context.Context, id int64) (bool, error) {
 
+	archived := repo.cache.IsArchived(id)
+
+	if archived {
+		return true, nil
+	}
+
 	query := `SELECT EXISTS(SELECT 1 FROM note WHERE id = ? and archived = 1);`
 
 	stmt, err := repo.db.PrepareContext(ctx, query)
@@ -295,5 +326,11 @@ func (repo NoteRepository) IsArchived(ctx context.Context, id int64) (bool, erro
 		return false, err
 	}
 
+	repo.cache.ArchiveNote(id)
+
 	return exists, nil
+}
+
+func (repo NoteRepository) RefreshCache() {
+	repo.cache.Refresh()
 }

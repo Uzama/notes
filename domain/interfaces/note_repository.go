@@ -15,4 +15,5 @@ type NoteRepository interface {
 	DeleteNote(ctx context.Context, id int64) (bool, error)
 	IsExists(ctx context.Context, id int64) (bool, error)
 	IsArchived(ctx context.Context, id int64) (bool, error)
+	RefreshCache()
 }

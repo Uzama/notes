@@ -8,5 +8,6 @@ type NoteCache interface {
 	DeleteNote(id int64)
 	ArchiveNote(id int64)
 	UnArchiveNote(id int64)
+	IsArchived(id int64) bool
 	Refresh()
 }

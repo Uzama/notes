@@ -45,6 +45,12 @@ func (cache NoteCache) UnArchiveNote(id int64) {
 	delete(cache.archiveIndex, id)
 }
 
+func (cache NoteCache) IsArchived(id int64) bool {
+	_, ok := cache.archiveIndex[id]
+
+	return ok
+}
+
 func (cache *NoteCache) Refresh() {
 	cache.noteIndex = make(map[int64]entities.Note)
 	cache.archiveIndex = make(map[int64]struct{})
