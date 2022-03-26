@@ -182,7 +182,7 @@ func (repo NoteRepository) CreateNote(ctx context.Context, note entities.Note) (
 
 func (repo NoteRepository) ArchiveNote(ctx context.Context, id int64) (bool, error) {
 
-	query := `UPDATE note SET archived = 1 where id = ?;`
+	query := `UPDATE note SET archived = 1 WHERE id = ?;`
 
 	stmt, err := repo.db.PrepareContext(ctx, query)
 	if err != nil {
@@ -201,10 +201,7 @@ func (repo NoteRepository) ArchiveNote(ctx context.Context, id int64) (bool, err
 
 func (repo NoteRepository) UpdateNote(ctx context.Context, id int64, newNote entities.Note) (bool, error) {
 
-	query := `
-		UPDATE note SET title = ?, description = ?
-		WHERE id = ?;
-	`
+	query := `UPDATE note SET title = ?, description = ? WHERE id = ?;`
 
 	stmt, err := repo.db.PrepareContext(ctx, query)
 	if err != nil {
@@ -243,7 +240,7 @@ func (repo NoteRepository) DeleteNote(ctx context.Context, id int64) (bool, erro
 
 func (repo NoteRepository) IsExists(ctx context.Context, id int64) (bool, error) {
 
-	query := `SELECT EXISTS(SELECT 1 FROM note WHERE id = ?;)`
+	query := `SELECT EXISTS(SELECT 1 FROM note WHERE id = ?);`
 
 	stmt, err := repo.db.PrepareContext(ctx, query)
 
@@ -272,7 +269,7 @@ func (repo NoteRepository) IsExists(ctx context.Context, id int64) (bool, error)
 
 func (repo NoteRepository) IsArchived(ctx context.Context, id int64) (bool, error) {
 
-	query := `SELECT EXISTS(SELECT 1 FROM note WHERE archived = 1;)`
+	query := `SELECT EXISTS(SELECT 1 FROM note WHERE id = ? and archived = 1);`
 
 	stmt, err := repo.db.PrepareContext(ctx, query)
 
