@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"context"
+	"log"
 	"notes/http/router"
 	"notes/http/server"
 	"notes/utils/config"
@@ -41,10 +42,13 @@ func Start(ctx context.Context) {
 }
 
 func Destruct(ctx context.Context, ctr container.Containers, server server.HTTPServer) {
+
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
 	go server.Shutdown(ctx)
 
 	<-ctx.Done()
+
+	log.Println("service shutdown gracefully")
 }
