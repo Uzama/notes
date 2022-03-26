@@ -1,0 +1,12 @@
+user: "root"
+password: "password"
+host: "localhost"
+port: 3306
+database: "notes"
+idle-connection: 10
+open-connection: 20
+connection-life-time: 600000
+connection-idle-time: 600000
+read-timeout: 60000
+write-timeout: 60000
+timeout: 60000

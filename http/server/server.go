@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"notes/utils/config"
 	"strconv"
@@ -11,7 +12,8 @@ import (
 )
 
 type HTTPServer struct {
-	server *http.Server
+	server  *http.Server
+	address string
 }
 
 func NewHTTPServer(config config.Config, r *mux.Router) HTTPServer {
@@ -28,24 +30,31 @@ func NewHTTPServer(config config.Config, r *mux.Router) HTTPServer {
 	}
 
 	httpServer := HTTPServer{
-		server: server,
+		server:  server,
+		address: address,
 	}
 
 	return httpServer
 }
 
 func (srv HTTPServer) ListnAndServe(ctx context.Context) {
+
+	log.Printf("server listening on %s", srv.address)
+
 	err := srv.server.ListenAndServe()
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 }
 
 func (srv HTTPServer) Shutdown(ctx context.Context) {
+
+	log.Println("stropping HTTP server")
+
 	srv.server.SetKeepAlivesEnabled(false)
 
 	err := srv.server.Shutdown(ctx)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 }
