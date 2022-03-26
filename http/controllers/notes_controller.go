@@ -8,6 +8,7 @@ import (
 	"notes/http/transport/request"
 	"notes/http/transport/request/decoders"
 	"notes/http/transport/response"
+	"notes/http/validators"
 	"notes/utils/container"
 	"strconv"
 
@@ -15,12 +16,14 @@ import (
 )
 
 type NoteController struct {
-	usecase usecases.NoteUsecase
+	usecase   usecases.NoteUsecase
+	validator validators.Validator
 }
 
 func NewNoteController(ctr container.Containers) NoteController {
 	ctl := NoteController{
-		usecase: usecases.NewNoteUsecase(ctr.Repositories.Note),
+		usecase:   usecases.NewNoteUsecase(ctr.Repositories.Note),
+		validator: validators.NewValidator(),
 	}
 
 	return ctl
@@ -35,6 +38,12 @@ func (ctl NoteController) GetAllUnarchivedNotes(w http.ResponseWriter, r *http.R
 	pageDecoder := decoders.Paginator{}
 
 	err := json.Unmarshal([]byte(param), &pageDecoder)
+	if err != nil {
+		errors.HandleError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	err = ctl.validator.Validate(ctx, pageDecoder)
 	if err != nil {
 		errors.HandleError(w, err, http.StatusBadRequest)
 		return
@@ -71,6 +80,12 @@ func (ctl NoteController) GetAllArchviedNotes(w http.ResponseWriter, r *http.Req
 		return
 	}
 
+	err = ctl.validator.Validate(ctx, pageDecoder)
+	if err != nil {
+		errors.HandleError(w, err, http.StatusBadRequest)
+		return
+	}
+
 	paginator, err := pageDecoder.Validate()
 	if err != nil {
 		errors.HandleError(w, err, http.StatusBadRequest)
@@ -95,6 +110,12 @@ func (ctl NoteController) CreateNote(w http.ResponseWriter, r *http.Request) {
 	noteDecoder := decoders.Note{}
 
 	err := request.Decode(ctx, r, &noteDecoder)
+	if err != nil {
+		errors.HandleError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	err = ctl.validator.Validate(ctx, noteDecoder)
 	if err != nil {
 		errors.HandleError(w, err, http.StatusBadRequest)
 		return
@@ -155,6 +176,12 @@ func (ctl NoteController) UpdateNote(w http.ResponseWriter, r *http.Request) {
 	updateNoteDecoder := decoders.UpdateNote{}
 
 	err = request.Decode(ctx, r, &updateNoteDecoder)
+	if err != nil {
+		errors.HandleError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	err = ctl.validator.Validate(ctx, updateNoteDecoder)
 	if err != nil {
 		errors.HandleError(w, err, http.StatusBadRequest)
 		return
