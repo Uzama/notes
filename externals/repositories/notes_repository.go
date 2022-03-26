@@ -9,12 +9,14 @@ import (
 )
 
 type NoteRepository struct {
-	db *sql.DB
+	db    *sql.DB
+	cache interfaces.NoteCache
 }
 
-func NewNoteRepository(db *sql.DB) interfaces.NoteRepository {
+func NewNoteRepository(db *sql.DB, cache interfaces.NoteCache) interfaces.NoteRepository {
 	repo := &NoteRepository{
-		db: db,
+		db:    db,
+		cache: cache,
 	}
 
 	return repo

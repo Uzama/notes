@@ -2,7 +2,9 @@ package container
 
 import (
 	"database/sql"
+	"notes/domain/interfaces"
 	"notes/externals/adapters"
+	"notes/externals/cache"
 	"notes/externals/repositories"
 	"notes/utils/config"
 )
@@ -13,7 +15,9 @@ func Resolve(config config.Config) (Containers, error) {
 		return Containers{}, err
 	}
 
-	repos, err := resolveRepostories(adaptrs.Db)
+	caches := resolveCaches()
+
+	repos, err := resolveRepostories(adaptrs.Db, caches.Note)
 	if err != nil {
 		return Containers{}, err
 	}
@@ -40,8 +44,18 @@ func resolveAdapters(config config.Config) (Adapters, error) {
 	return adapters, nil
 }
 
-func resolveRepostories(db *sql.DB) (Repositories, error) {
-	noteRepo := repositories.NewNoteRepository(db)
+func resolveCaches() Caches {
+	noteCache := cache.NewNoteCache()
+
+	caches := Caches{
+		Note: noteCache,
+	}
+
+	return caches
+}
+
+func resolveRepostories(db *sql.DB, noteCache interfaces.NoteCache) (Repositories, error) {
+	noteRepo := repositories.NewNoteRepository(db, noteCache)
 
 	repos := Repositories{
 		Note: noteRepo,

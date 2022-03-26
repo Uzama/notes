@@ -20,4 +20,5 @@ type Repositories struct {
 }
 
 type Caches struct {
+	Note interfaces.NoteCache
 }
