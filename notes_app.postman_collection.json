@@ -1,0 +1,192 @@
+{
+	"info": {
+		"_postman_id": "d698bc76-6738-4606-9f23-d3f92717072e",
+		"name": "notes app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get all unarchived notes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/note/get_un_archived?paginator={\"page\": 1, \"size\":10}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"note",
+						"get_un_archived"
+					],
+					"query": [
+						{
+							"key": "paginator",
+							"value": "{\"page\": 1, \"size\":10}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get archived notes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/note/get_archived?paginator={\"page\": 1,\"size\":10} ",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"note",
+						"get_archived"
+					],
+					"query": [
+						{
+							"key": "paginator",
+							"value": "{\"page\": 1,\"size\":10} "
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save a note",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/note/get_un_archived?paginator={\"page\": 1, \"size\":10}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"note",
+						"get_un_archived"
+					],
+					"query": [
+						{
+							"key": "paginator",
+							"value": "{\"page\": 1, \"size\":10}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "archive a note",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/note/archive/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"note",
+						"archive",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update a note",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\" : \"hi\",\n    \"description\": \"adding\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/note/update/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"note",
+						"update",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete a note",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/note/delete/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"note",
+						"delete",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refresh cache",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/note/refresh_cache",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"note",
+						"refresh_cache"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "un archive a note",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/note/un_archive/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"note",
+						"un_archive",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
