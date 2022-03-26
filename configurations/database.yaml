@@ -2,7 +2,7 @@ user: "root"
 password: "password"
 host: "localhost"
 port: 3306
-database: "auth"
+database: "notes"
 idle-connection: 10
 open-connection: 20
 connection-life-time: 600000

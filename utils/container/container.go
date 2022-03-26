@@ -1,6 +1,9 @@
 package container
 
-import "notes/domain/interfaces"
+import (
+	"database/sql"
+	"notes/domain/interfaces"
+)
 
 type Containers struct {
 	Adapters     Adapters
@@ -9,6 +12,7 @@ type Containers struct {
 }
 
 type Adapters struct {
+	Db *sql.DB
 }
 
 type Repositories struct {
