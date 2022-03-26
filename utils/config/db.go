@@ -15,6 +15,7 @@ type Database struct {
 	IdleConnection     int    `yaml:"idle-connection"`
 	OpenConnection     int    `yaml:"open-connection"`
 	ConnectionLifeTime int    `yaml:"connection-life-time"`
+	ConnectionIdleTime int    `yaml:"connection-idle-time"`
 	ReadTimeout        int    `yaml:"read-timeout"`
 	WriteTimeout       int    `yaml:"write-timeout"`
 	Timeout            int    `yaml:"timeout"`
