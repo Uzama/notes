@@ -161,6 +161,29 @@ func (ctl NoteController) ArchiveNote(w http.ResponseWriter, r *http.Request) {
 	response.Send(w, payload, http.StatusAccepted)
 }
 
+func (ctl NoteController) UnArchiveNote(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	vars := mux.Vars(r)
+
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		errors.HandleError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	unArchived, err := ctl.usecase.UnArchiveNote(ctx, int64(id))
+	if err != nil {
+		errors.HandleError(w, err, http.StatusUnprocessableEntity)
+		return
+	}
+
+	payload := response.Encode(id, nil, unArchived)
+
+	response.Send(w, payload, http.StatusAccepted)
+}
+
 func (ctl NoteController) UpdateNote(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
