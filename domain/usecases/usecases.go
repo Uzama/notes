@@ -81,6 +81,37 @@ func (usecase NoteUsecase) ArchiveNote(ctx context.Context, id int64) (bool, err
 	return archived, nil
 }
 
+func (usecase NoteUsecase) UnArchiveNote(ctx context.Context, id int64) (bool, error) {
+
+	// check for existence
+	isExists, err := usecase.repo.IsExists(ctx, id)
+	if err != nil {
+		return false, err
+	}
+
+	if !isExists {
+		return false, fmt.Errorf("%d note is not exists", id)
+	}
+
+	// check whether note is already archived
+	isArchived, err := usecase.repo.IsArchived(ctx, id)
+	if err != nil {
+		return false, err
+	}
+
+	if !isArchived {
+		return false, fmt.Errorf("%d note is already un archived", id)
+	}
+
+	// archive the note
+	unArchived, err := usecase.repo.UnArchiveNote(ctx, id)
+	if err != nil {
+		return false, err
+	}
+
+	return unArchived, nil
+}
+
 func (usecase NoteUsecase) UpdateNote(ctx context.Context, id int64, newNote entities.Note) (bool, error) {
 
 	// validate max length

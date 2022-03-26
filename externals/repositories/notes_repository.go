@@ -214,6 +214,27 @@ func (repo NoteRepository) ArchiveNote(ctx context.Context, id int64) (bool, err
 	return true, nil
 }
 
+func (repo NoteRepository) UnArchiveNote(ctx context.Context, id int64) (bool, error) {
+
+	query := `UPDATE note SET archived = 0 WHERE id = ?;`
+
+	stmt, err := repo.db.PrepareContext(ctx, query)
+	if err != nil {
+		return false, err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(id)
+	if err != nil {
+		return false, err
+	}
+
+	repo.cache.UnArchiveNote(id)
+
+	return true, nil
+}
+
 func (repo NoteRepository) UpdateNote(ctx context.Context, id int64, newNote entities.Note) (bool, error) {
 
 	query := `UPDATE note SET title = ?, description = ? WHERE id = ?;`
@@ -325,8 +346,6 @@ func (repo NoteRepository) IsArchived(ctx context.Context, id int64) (bool, erro
 	if err != nil {
 		return false, err
 	}
-
-	repo.cache.ArchiveNote(id)
 
 	return exists, nil
 }

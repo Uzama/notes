@@ -20,7 +20,7 @@ func NewNoteCache() interfaces.NoteCache {
 	return cache
 }
 
-func (cache NoteCache) SetNote(note entities.Note) {
+func (cache *NoteCache) SetNote(note entities.Note) {
 	cache.noteIndex[note.ID] = note
 }
 
@@ -33,15 +33,15 @@ func (cache NoteCache) GetNote(id int64) (entities.Note, bool) {
 	return note, true
 }
 
-func (cache NoteCache) DeleteNote(id int64) {
+func (cache *NoteCache) DeleteNote(id int64) {
 	delete(cache.noteIndex, id)
 }
 
-func (cache NoteCache) ArchiveNote(id int64) {
+func (cache *NoteCache) ArchiveNote(id int64) {
 	cache.archiveIndex[id] = struct{}{}
 }
 
-func (cache NoteCache) UnArchiveNote(id int64) {
+func (cache *NoteCache) UnArchiveNote(id int64) {
 	delete(cache.archiveIndex, id)
 }
 
